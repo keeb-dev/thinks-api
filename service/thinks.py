@@ -4,10 +4,14 @@ from service.mongo import bubbles
 
 logger = logging.getLogger(__name__)
 
+
 def get_think_list():
     the_actual_list = []
     for thinks in bubbles.find():
         logger.debug("the thinks i got was %s" % thinks)
+        logger.debug("deleting _id field")
+        del thinks["_id"]
+        logger.debug("resulting thinks is %s" % thinks)
         the_actual_list.append(thinks)
     return the_actual_list
 
