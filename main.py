@@ -1,12 +1,12 @@
 import os
-from flask import Flask, jsonify
+import logging
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
+from flask import Flask, jsonify
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from service.thinks import get_think_list, store_think
 from telemetry.tracing import provider
 
-LoggingInstrumentor().instrument(set_logging_format=True)
-
+LoggingInstrumentor().instrument(set_logging_format=True, log_level=logging.DEBUG)
 
 # set up flask and instrumentation
 app = Flask(__name__)
