@@ -1,12 +1,12 @@
-from flask import Flask, jsonify
 import os
+from flask import Flask, jsonify
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-
-from service.thinks import get_think_list, store_think
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+from service.thinks import get_think_list, store_think
+
 
 # set up the otel stuff
 provider = TracerProvider(
