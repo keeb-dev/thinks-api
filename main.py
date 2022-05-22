@@ -1,23 +1,12 @@
 import os
 from flask import Flask, jsonify
-from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from service.thinks import get_think_list, store_think
+from telemetry.tracing import provider
 
+LoggingInstrumentor().instrument(set_logging_format=True)
 
-# set up the otel stuff
-provider = TracerProvider(
-       resource=Resource.create({SERVICE_NAME: "think-app"})
-)
-jaeger_exporter = JaegerExporter(
-   agent_host_name="edgelord",
-   agent_port=6831,
-)
-
-provider.add_span_processor(BatchSpanProcessor(jaeger_exporter))
 
 # set up flask and instrumentation
 app = Flask(__name__)
