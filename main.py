@@ -34,12 +34,5 @@ def new_think():
     return "", 201
 
 
-@app.route("/secret")
-def secret():
-    # we are adding some data in secret!!
-    store_think("i am thinking about something and it is really great")
-    return "", 201
-
-
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=os.getenv("PORT", default=5000))
