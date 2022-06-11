@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector:0.25.0
+    ports:
+      - "6831:6831"
+      - "14268:14268"
+      - "4317:4317"
+    volumes:
+      - ./config/otel-collector.yaml:/config/otel-collector.yaml
+    command:
+      - --config=/config/otel-collector.yaml
+  
+  tempo:
+    image: grafana/tempo:0.7.0
+    command: ["-config.file=/etc/tempo.yaml"]
+    ports:
+      - "3100:3100"
+      - "55680:55680"
+    volumes:
+      - ./config/tempo.yaml:/etc/tempo.yaml
+      - ./example-data/tempo:/tmp/tempo  
+
+  api:
+    image: keeb/thinks-api
+    ports:
+      - "5000:5000"
+    environment:
+      - AGENT_HOSTNAME=otel-collector
+      - MONGODB_PW=<XYZ>
+      - OTEL_PYTHON_LOG_CORRELATION=true
+    depends_on:
+      - otel-collector
+
+  grafana:
+    image: grafana/grafana:7.5.4
+    volumes:
+      - ./config/datasource.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - tempo

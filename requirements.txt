@@ -4,6 +4,6 @@ opentelemetry-sdk
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-pymongo
 opentelemetry-instrumentation-logging
-opentelemetry-exporter-jaeger
+opentelemetry-exporter-otlp
 pymongo
 dnspython
